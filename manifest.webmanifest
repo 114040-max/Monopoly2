@@ -1,0 +1,9 @@
+{
+  "name": "早春圖賞析之旅",
+  "short_name": "早春圖",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fcfaf2",
+  "theme_color": "#5d4037",
+  "lang": "zh-Hant"
+}

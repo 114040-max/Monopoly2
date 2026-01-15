@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>早春圖・擲骰賞析</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#5d4037">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #3a3a38, #1f1f1e);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      aspect-ratio: 1 / 1;
+      background: #fcfaf2;
+      border: 6px solid #5d4037;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cell {
+      border: 1px solid #d4d1c7;
+      font-size: 11px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(#fffdf7, #f2eee5);
+      position: relative;
+    }
+
+    .corner {
+      background: #ded8cb;
+    }
+
+    #art {
+      grid-column: 2 / span 4;
+      grid-row: 2 / span 4;
+      border: 3px solid #5d4037;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #player {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: crimson;
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+    }
+  </style>
+</head>
+
+<body class="text-amber-100">
+
+<div class="max-w-md mx-auto p-3">
+
+  <h1 class="text-center text-xl font-bold mb-2">
+    🎲 早春圖賞析之旅
+  </h1>
+
+  <!-- 棋盤 -->
+  <div id="board" class="mb-4">
+
+    <!-- 下 -->
+    <div class="cell corner" style="grid-row:6;grid-column:6">起點</div>
+    <div class="cell" style="grid-row:6;grid-column:5">溪澗</div>
+    <div class="cell" style="grid-row:6;grid-column:4">人物</div>
+    <div class="cell" style="grid-row:6;grid-column:3">蟹爪枝</div>
+    <div class="cell" style="grid-row:6;grid-column:2">雲頭皴</div>
+    <div class="cell corner" style="grid-row:6;grid-column:1">修復所</div>
+
+    <!-- 左 -->
+    <div class="cell" style="grid-row:5;grid-column:1">溪澗</div>
+    <div class="cell" style="grid-row:4;grid-column:1">人物</div>
+    <div class="cell" style="grid-row:3;grid-column:1">蟹爪枝</div>
+    <div class="cell" style="grid-row:2;grid-column:1">雲頭皴</div>
+
+    <!-- 上 -->
+    <div class="cell corner" style="grid-row:1;grid-column:1">名畫印</div>
+    <div class="cell" style="grid-row:1;grid-column:2">溪澗</div>
+    <div class="cell" style="grid-row:1;grid-column:3">人物</div>
+    <div class="cell" style="grid-row:1;grid-column:4">蟹爪枝</div>
+    <div class="cell" style="grid-row:1;grid-column:5">雲頭皴</div>
+    <div class="cell corner" style="grid-row:1;grid-column:6">賞析亭</div>
+
+    <!-- 右 -->
+    <div class="cell" style="grid-row:2;grid-column:6">溪澗</div>
+    <div class="cell" style="grid-row:3;grid-column:6">人物</div>
+    <div class="cell" style="grid-row:4;grid-column:6">蟹爪枝</div>
+    <div class="cell" style="grid-row:5;grid-column:6">雲頭皴</div>
+
+    <!-- 中央名畫 -->
+    <div id="art">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Guo_Xi_-_Early_Spring_%28Zaochun_Tu%29_-_Google_Art_Project.jpg">
+    </div>
+  </div>
+
+  <!-- 骰子 -->
+  <div class="flex flex-col items-center gap-2">
+    <div id="diceText" class="text-lg font-bold">
+      🎲 點擊擲骰
+    </div>
+    <button
+      id="diceBtn"
+      class="px-8 py-3 bg-amber-700 rounded-2xl text-xl font-bold active:scale-95">
+      擲骰
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // 註冊 Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js');
+  }
+
+  const cells = document.querySelectorAll('.cell');
+  let position = 0;
+
+  const player = document.createElement('div');
+  player.id = 'player';
+  cells[0].appendChild(player);
+
+  const diceText = document.getElementById('diceText');
+  const diceBtn = document.getElementById('diceBtn');
+
+  diceBtn.addEventListener('click', () => {
+    const roll = Math.floor(Math.random() * 6) + 1;
+    diceText.textContent = `🎲 擲到 ${roll} 點`;
+    position = (position + roll) % cells.length;
+    cells[position].appendChild(player);
+  });
+</script>
+
+</body>
+</html>
